@@ -1,0 +1,28 @@
+.labelStyle{
+    margin-bottom: 20px;
+    }
+input {
+    width: 100%;
+    padding: 8px 15px;
+    margin: 100px 0px;
+    box-sizing: border-box;
+    border: none;
+    border-bottom: 2px solid gray;
+  }
+  select{
+    width: 100%;
+    padding: 8px 15px;
+    margin: 100px 0px;
+    box-sizing: border-box;
+    border: none;
+    border-bottom: 2px solid gray;
+  }
+  select:focus{
+    outline: none;
+    border-bottom: 2px solid skyblue;
+  }
+  input:focus{
+    border: none;
+    outline: none;
+    border-bottom: 2px solid skyblue;
+  }

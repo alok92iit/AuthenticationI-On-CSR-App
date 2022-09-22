@@ -1,3 +1,7 @@
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
+
 const express =require("express")
 const app =express()
 const cors =require("cors")
@@ -7,10 +11,13 @@ const localStretegy =require("passport-local")
 const session =require("express-session")
 const MongoStore  =require("connect-mongo");
 const User = require("./model/User")
-
 //Route Imports
 const router =require("./routes/auth")
-app.use(cors())
+app.use(  cors({
+    origin: "http://localhost:3000",
+    methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
+    credentials: true,
+  }))
 app.use(express.json())
 mongoose.connect('mongodb://localhost:27017/cliffexUser')
 .then((result) => {
@@ -29,6 +36,7 @@ const sessionConfig ={
     secret:"cliffexAdminPortal",
     resave :false,
     saveUninitialized: true,
+    withCredentials:true,
     cookie:{
         httpOnly:true,
         expire :Date.now() +1000*60*60*24*7*1,
@@ -40,12 +48,12 @@ app.use(session(sessionConfig))
 //Inialize passport middlware
 app.use(passport.initialize())
 app.use(passport.session())
-
+passport.use(new localStretegy(User.authenticate()))
 //session
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 //tellin passport to check username and password is corrrect or not using authentication method of passport-local-mongoose
-passport.use(new localStretegy(User.authenticate()))
+
 app.use((req,res,next)=>{
     //this is the type of global varible we can use i any temlate 
     res.locals.currentUsers =req.user;

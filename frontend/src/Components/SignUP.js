@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react'
 import '../Components/Header.css'
 import axios from 'axios'
 import { Button,Input, Modal ,Checkbox,Select,Form} from 'semantic-ui-react'
+import { useNavigate } from 'react-router-dom'
 const SignUP = (state, action) => {
     switch (action.type) {
         case 'OPEN_MODAL':
@@ -31,6 +32,8 @@ const SignUP = (state, action) => {
       const [emailValid,setValidEmail] =useState(true)
       const [genderValid,setValidGender] =useState(true)
       const [passwordValid,setValidPassword] =useState(true)
+      const [checkUsername,validOrNot] =useState(true)
+      const navigate =useNavigate();
       const { open, dimmer } = state
       const nameHandler=()=>{
          name = nameRef.current.value;
@@ -108,19 +111,19 @@ const SignUP = (state, action) => {
           })
         
             // Handle the response from backend here
-            .then((res) => { })
+            .then((res) => { navigate("/")})
         
             // Catch errors if any
-            .catch((err) => {console.log(err) });
+            .catch((err) => {validOrNot(false)});
         
       }
       return (
         <ul style={{
             listStyle:"none",
-            display:"flex",
-            justifyContent:"flex-end",
-            gap:"30px",
-            margin:"20px"
+            // display:"flex",
+            // justifyContent:"flex-end",
+            // gap:"30px",
+            // margin:"20px"
             }}>
           <li onClick={() => {dispatch({ type: 'OPEN_MODAL', dimmer: 'blurring' })}}>
             SignUP
@@ -154,8 +157,9 @@ const SignUP = (state, action) => {
                 <label >Password</label>
                 <input type="password" style={{borderBottom:`${!passwordValid?'2px solid red':'2px solid skyblue'}`}} onChange={passwordHandler} ref={passwordRef}/>
                 </div>
-            
-                
+                <center>
+                    <p style={{color:"red"}}>{checkUsername?'':"Username is already exist!"}</p>
+                </center>
             </form>
             </Modal.Content>
             <Modal.Actions>

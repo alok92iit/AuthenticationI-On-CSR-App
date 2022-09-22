@@ -2,6 +2,8 @@ import React, { useRef, useState } from 'react'
 import '../Components/Header.css'
 import axios from 'axios'
 import { Button,Input, Modal ,Checkbox,Select,Form} from 'semantic-ui-react'
+import { useNavigate } from 'react-router-dom'
+
 const Login = (state, action) => {
     switch (action.type) {
         case 'OPEN_MODAL':
@@ -17,7 +19,7 @@ const Login = (state, action) => {
     function ModalExampleDimmer() {
       const nameRef =useRef();
       const passwordRef =useRef();
-    
+      const navigate =useNavigate();
       const [state, dispatch] = React.useReducer(Login, {
         open: false,
         dimmer: undefined,
@@ -75,11 +77,14 @@ const Login = (state, action) => {
             // },
         
             // Attaching the form data
-            data: {username:name,password},
+            data: {username:name,password},withCredentials: true, // Now this is was the missing piece in the client side 
+          
           })
         
             // Handle the response from backend here
-            .then((res) => { })
+            .then((res) => {
+              navigate("/members")
+             })
         
             // Catch errors if any
             .catch((err) => {console.log(err) });
@@ -88,10 +93,10 @@ const Login = (state, action) => {
       return (
         <ul style={{
             listStyle:"none",
-            display:"flex",
-            justifyContent:"flex-end",
-            gap:"30px",
-            margin:"20px"
+            // display:"flex",
+            // justifyContent:"flex-end",
+            // gap:"30px",
+            // margin:"20px"
             }}>
           <li onClick={() => {dispatch({ type: 'OPEN_MODAL', dimmer: 'blurring' })}}>
             Login
